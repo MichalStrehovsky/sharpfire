@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType Condition="$(UseCoreRT) != 'true'">WinExe</OutputType>
+    <TargetFramework>net5</TargetFramework>
+    <LangVersion>preview</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+    <RestoreSources>
+      https://api.nuget.org/v3/index.json;
+      https://dotnet.myget.org/F/roslyn/api/v3/index.json;
+      https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json;
+    </RestoreSources>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(UseCoreRT) == 'true'">
+    <OutputType>Exe</OutputType>
+    <DefineConstants>CORERT;$(DefineConstants)</DefineConstants>
+    <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
+    <IlcInvariantGlobalization>true</IlcInvariantGlobalization>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <RuntimeMetadataVersion>v4.0.30319</RuntimeMetadataVersion>
+    <IlcDisableReflection>true</IlcDisableReflection>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <IlcSystemModule>nogui</IlcSystemModule>
+  </PropertyGroup>
+
+  <ItemGroup Condition="$(UseCoreRT) == 'true'">
+    <LinkerArg Include="/subsystem:windows /entry:__managed__Main" />
+    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="1.0.0-alpha-29101-01" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(UseCoreRT) != 'true'">
+    <Compile Remove="MiniBCL.cs" />
+    <Compile Remove="MiniRuntime.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="3.7.0-3.20302.9" />
+  </ItemGroup>
+
+  <Target Name="CustomizeReferences" BeforeTargets="BeforeCompile" AfterTargets="FindReferenceAssembliesForReferences" Condition="$(UseCoreRT) == 'true'">
+    <ItemGroup>
+      <ReferencePathWithRefAssemblies Remove="@(ReferencePathWithRefAssemblies)" />
+      <ReferencePath Remove="@(ReferencePath)" />
+    </ItemGroup>
+  </Target>
+
+</Project>
