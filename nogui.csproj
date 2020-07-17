@@ -29,7 +29,7 @@
 
   <ItemGroup Condition="$(UseCoreRT) == 'true'">
     <LinkerArg Include="/subsystem:windows /entry:__managed__Main" />
-    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="1.0.0-alpha-29101-01" />
+    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="1.0.0-alpha-29117-01" />
   </ItemGroup>
 
   <ItemGroup Condition="$(UseCoreRT) != 'true'">

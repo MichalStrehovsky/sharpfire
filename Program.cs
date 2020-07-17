@@ -56,7 +56,7 @@ unsafe class Program
 
     static FirePixels firePixels;
 
-    static MiniRandom rng = new MiniRandom(5005);
+    static MiniRandom rng;
 
     static void SpreadFire(int src)
     {
@@ -175,6 +175,8 @@ unsafe class Program
 
     static int Main()
     {
+        rng = new MiniRandom(5005);
+
         string className = "MyClass";
         IntPtr wnd;
         fixed (char* pClassName = className)
